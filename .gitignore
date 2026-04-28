@@ -1,1 +1,2 @@
 node_modules/\n*.db\n.env\npackage-lock.json\n.DS_Store
+node_modules/
