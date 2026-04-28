@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Printastick Admin - Inquiries</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Open Sans', sans-serif; }
+    .font-heading { font-family: 'Montserrat', sans-serif; }
+  </style>
+</head>
+<body class="bg-silver-50 min-h-screen">
+  <!-- Header -->
+  <header class="bg-navy-500 text-white py-6 shadow-lg">
+    <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center">
+          <span class="text-white font-heading font-bold text-lg">P</span>
+        </div>
+        <div>
+          <h1 class="font-heading font-bold text-xl">Printastick Admin</h1>
+          <p class="text-silver-300 text-xs">Inquiry Management System</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-4">
+        <button onclick="exportCSV()" class="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+          </svg>
+          Export CSV
+        </button>
+        <a href="/" class="bg-cred-500 hover:bg-cred-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+          View Website
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-6 py-8">
+    <!-- Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <div class="bg-white rounded-xl p-6 border border-silver-200 shadow-sm">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-silver-500 text-sm">Total Inquiries</p>
+            <p class="font-heading font-bold text-3xl text-navy-500" id="totalCount">0</p>
+          </div>
+          <div class="w-12 h-12 bg-navy-50 rounded-xl flex items-center justify-center">
+            <svg class="w-6 h-6 text-navy-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white rounded-xl p-6 border border-silver-200 shadow-sm">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-silver-500 text-sm">Bulk Orders</p>
+            <p class="font-heading font-bold text-3xl text-navy-500" id="bulkCount">0</p>
+          </div>
+          <div class="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center">
+            <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white rounded-xl p-6 border border-silver-200 shadow-sm">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-silver-500 text-sm">Tenders</p>
+            <p class="font-heading font-bold text-3xl text-navy-500" id="tenderCount">0</p>
+          </div>
+          <div class="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center">
+            <svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="bg-white rounded-xl p-6 border border-silver-200 shadow-sm">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-silver-500 text-sm">Distributors</p>
+            <p class="font-heading font-bold text-3xl text-navy-500" id="distCount">0</p>
+          </div>
+          <div class="w-12 h-12 bg-orange-50 rounded-xl flex items-center justify-center">
+            <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Inquiries Table -->
+    <div class="bg-white rounded-xl border border-silver-200 shadow-sm overflow-hidden">
+      <div class="px-6 py-4 border-b border-silver-200 flex items-center justify-between">
+        <h2 class="font-heading font-bold text-lg text-navy-500">Inquiry Inbox</h2>
+        <button onclick="loadContacts()" class="text-sm text-cred-500 hover:text-cred-600 font-medium">
+          ⟳ Refresh
+        </button>
+      </div>
+      
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead class="bg-silver-50">
+            <tr>
+              <th class="text-left px-6 py-3 text-xs font-heading font-semibold text-navy-500 uppercase tracking-wider">Contact</th>
+              <th class="text-left px-6 py-3 text-xs font-heading font-semibold text-navy-500 uppercase tracking-wider">Organization</th>
+              <th class="text-left px-6 py-3 text-xs font-heading font-semibold text-navy-500 uppercase tracking-wider">Type</th>
+              <th class="text-left px-6 py-3 text-xs font-heading font-semibold text-navy-500 uppercase tracking-wider">Message</th>
+              <th class="text-left px-6 py-3 text-xs font-heading font-semibold text-navy-500 uppercase tracking-wider">Date</th>
+              <th class="text-right px-6 py-3 text-xs font-heading font-semibold text-navy-500 uppercase tracking-wider">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="contactsTable" class="divide-y divide-silver-100">
+            <tr>
+              <td colspan="6" class="px-6 py-12 text-center text-silver-400">
+                Loading inquiries...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Empty State -->
+      <div id="emptyState" class="hidden py-12 text-center">
+        <div class="w-16 h-16 bg-silver-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8 text-silver-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+          </svg>
+        </div>
+        <p class="text-silver-500 font-medium">No inquiries yet</p>
+        <p class="text-silver-400 text-sm mt-1">New submissions will appear here</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal -->
+  <div id="modal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-auto shadow-2xl">
+      <div class="px-6 py-4 border-b border-silver-200 flex items-center justify-between">
+        <h3 class="font-heading font-bold text-lg text-navy-500" id="modalTitle">Inquiry Details</h3>
+        <button onclick="closeModal()" class="text-silver-400 hover:text-silver-600">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <div class="p-6" id="modalContent">
+        <!-- Content filled by JS -->
+      </div>
+      <div class="px-6 py-4 border-t border-silver-200 flex justify-end gap-3">
+        <button onclick="closeModal()" class="px-4 py-2 text-silver-600 hover:text-silver-800 font-medium text-sm">
+          Close
+        </button>
+        <a id="modalEmailBtn" href="#" class="bg-navy-500 hover:bg-navy-600 text-white px-4 py-2 rounded-lg text-sm font-medium">
+          Reply via Email
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let contacts = [];
+
+    async function loadContacts() {
+      try {
+        const response = await fetch('/api/contacts');
+        contacts = await response.json();
+        renderContacts();
+        updateStats();
+      } catch (error) {
+        console.error('Failed to load contacts:', error);
+      }
+    }
+
+    async function loadDistributors() {
+      try {
+        const response = await fetch('/api/distributors');
+        const distributors = await response.json();
+        document.getElementById('distCount').textContent = distributors.length;
+      } catch (error) {
+        console.error('Failed to load distributors:', error);
+      }
+    }
+
+    function updateStats() {
+      document.getElementById('totalCount').textContent = contacts.length;
+      document.getElementById('bulkCount').textContent = contacts.filter(c => c.inquiry_type === 'bulk').length;
+      document.getElementById('tenderCount').textContent = contacts.filter(c => c.inquiry_type === 'tender').length;
+    }
+
+    function renderContacts() {
+      const table = document.getElementById('contactsTable');
+      const emptyState = document.getElementById('emptyState');
+
+      if (contacts.length === 0) {
+        table.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      table.innerHTML = contacts.map(c => `
+        <tr class="hover:bg-silver-50 transition-colors">
+          <td class="px-6 py-4">
+            <div>
+              <p class="font-medium text-silver-900">${escapeHtml(c.name)}</p>
+              <p class="text-sm text-silver-500">${escapeHtml(c.email)}</p>
+              ${c.phone ? `<p class="text-sm text-silver-400">${escapeHtml(c.phone)}</p>` : ''}
+            </div>
+          </td>
+          <td class="px-6 py-4 text-sm text-silver-600">${escapeHtml(c.organization)}</td>
+          <td class="px-6 py-4">
+            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${getTypeClass(c.inquiry_type)}">
+              ${getTypeLabel(c.inquiry_type)}
+            </span>
+          </td>
+          <td class="px-6 py-4">
+            <p class="text-sm text-silver-600 max-w-xs truncate">${escapeHtml(c.message)}</p>
+          </td>
+          <td class="px-6 py-4 text-sm text-silver-500">
+            ${new Date(c.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+          </td>
+          <td class="px-6 py-4 text-right">
+            <div class="flex items-center justify-end gap-2">
+              <button onclick="viewContact(${c.id})" class="p-2 text-silver-400 hover:text-navy-500 transition-colors" title="View">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                </svg>
+              </button>
+              <button onclick="deleteContact(${c.id})" class="p-2 text-silver-400 hover:text-red-500 transition-colors" title="Delete">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                </svg>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function getTypeClass(type) {
+      const classes = {
+        bulk: 'bg-green-50 text-green-700',
+        tender: 'bg-purple-50 text-purple-700',
+        distributor: 'bg-orange-50 text-orange-700',
+        custom: 'bg-blue-50 text-blue-700',
+        other: 'bg-silver-100 text-silver-700'
+      };
+      return classes[type] || classes.other;
+    }
+
+    function getTypeLabel(type) {
+      const labels = {
+        bulk: 'Bulk Order',
+        tender: 'Tender',
+        distributor: 'Distributor',
+        custom: 'Custom',
+        other: 'Other'
+      };
+      return labels[type] || 'Other';
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function viewContact(id) {
+      const contact = contacts.find(c => c.id === id);
+      if (!contact) return;
+
+      document.getElementById('modalTitle').textContent = `Inquiry from ${contact.name}`;
+      document.getElementById('modalContent').innerHTML = `
+        <div class="space-y-4">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <p class="text-xs text-silver-400 uppercase tracking-wider mb-1">Name</p>
+              <p class="font-medium text-silver-900">${escapeHtml(contact.name)}</p>
+            </div>
+            <div>
+              <p class="text-xs text-silver-400 uppercase tracking-wider mb-1">Organization</p>
+              <p class="font-medium text-silver-900">${escapeHtml(contact.organization)}</p>
+            </div>
+            <div>
+              <p class="text-xs text-silver-400 uppercase tracking-wider mb-1">Email</p>
+              <p class="font-medium text-navy-500">${escapeHtml(contact.email)}</p>
+            </div>
+            <div>
+              <p class="text-xs text-silver-400 uppercase tracking-wider mb-1">Phone</p>
+              <p class="font-medium text-silver-900">${escapeHtml(contact.phone || 'Not provided')}</p>
+            </div>
+            <div>
+              <p class="text-xs text-silver-400 uppercase tracking-wider mb-1">Inquiry Type</p>
+              <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${getTypeClass(contact.inquiry_type)}">
+                ${getTypeLabel(contact.inquiry_type)}
+              </span>
+            </div>
+            <div>
+              <p class="text-xs text-silver-400 uppercase tracking-wider mb-1">Submitted</p>
+              <p class="font-medium text-silver-900">${new Date(contact.created_at).toLocaleString('en-IN')}</p>
+            </div>
+          </div>
+          <div>
+            <p class="text-xs text-silver-400 uppercase tracking-wider mb-1">Message</p>
+            <p class="text-silver-700 bg-silver-50 rounded-lg p-4">${escapeHtml(contact.message).replace(/\n/g, '<br>')}</p>
+          </div>
+        </div>
+      `;
+      document.getElementById('modalEmailBtn').href = `mailto:${contact.email}?subject=Re: Printastick Inquiry`;
+      document.getElementById('modal').classList.remove('hidden');
+      document.getElementById('modal').classList.add('flex');
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.add('hidden');
+      document.getElementById('modal').classList.remove('flex');
+    }
+
+    async function deleteContact(id) {
+      if (!confirm('Delete this inquiry?')) return;
+      
+      try {
+        await fetch(`/api/contacts/${id}`, { method: 'DELETE' });
+        loadContacts();
+      } catch (error) {
+        alert('Failed to delete');
+      }
+    }
+
+    function exportCSV() {
+      window.open('/api/contacts/export', '_blank');
+    }
+
+    // Close modal on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    // Load data on page load
+    loadContacts();
+    loadDistributors();
+  </script>
+</body>
+</html>
