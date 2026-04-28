@@ -632,55 +632,22 @@
   </section>
 
   <!-- ============ DISTRIBUTORS SECTION ============ -->
-  <section id="distributors" class="py-24 lg:py-32 bg-white">
+    <section id="distributors" class="py-24 lg:py-32 bg-white">
     <div class="max-w-7xl mx-auto px-6">
       <!-- Section header -->
-      <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-12">
-        <div>
-          <span class="reveal inline-block text-cred-500 font-heading font-semibold text-sm uppercase tracking-widest mb-4">Our Network</span>
-          <h2 class="reveal font-heading font-bold text-3xl sm:text-4xl lg:text-5xl text-navy-500 tracking-tight" style="transition-delay:100ms">
-            Distributors Portal
-          </h2>
-          <p class="reveal text-silver-600 text-lg mt-3 max-w-xl" style="transition-delay:200ms">
-            Find a Printastick distributor near you or explore opportunities to join our nationwide network.
-          </p>
-        </div>
-        <a href="#contact" class="reveal inline-flex items-center gap-2 bg-navy-500 hover:bg-navy-600 text-white font-heading font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-navy-500/25 self-start" style="transition-delay:200ms">
-          <iconify-icon icon="lucide:user-plus" width="18"></iconify-icon>
-          Become a Distributor
-        </a>
-      </div>
-
-      <!-- Search bar -->
-      <div class="reveal mb-8">
-        <div class="relative max-w-md">
-          <iconify-icon icon="lucide:search" width="18" class="absolute left-4 top-1/2 -translate-y-1/2 text-silver-400"></iconify-icon>
-          <input type="text" id="distSearch" placeholder="Search by city, state, or pin code..." class="w-full pl-11 pr-4 py-3 rounded-xl border border-silver-200 bg-silver-50 text-silver-900 placeholder:text-silver-400 focus:outline-none focus:ring-2 focus:ring-navy-500/20 focus:border-navy-500 transition-all text-sm">
-        </div>
-      </div>
-
-      <!-- Distributors Table -->
-      <div class="reveal bg-silver-50 rounded-2xl border border-silver-200 overflow-hidden">
-        <div class="overflow-x-auto">
-          <table class="w-full">
-            <thead>
-              <tr class="border-b border-silver-200">
-                <th class="text-left px-6 py-4 text-xs font-heading font-semibold text-navy-500 uppercase tracking-wider">Distributor</th>
-                <th class="text-left px-6 py-4 text-xs font-heading font-semibold text-navy-500 uppercase tracking-wider">City</th>
-                <th class="text-left px-6 py-4 text-xs font-heading font-semibold text-navy-500 uppercase tracking-wider hidden sm:table-cell">State</th>
-                <th class="text-left px-6 py-4 text-xs font-heading font-semibold text-navy-500 uppercase tracking-wider hidden md:table-cell">Contact</th>
-                <th class="text-left px-6 py-4 text-xs font-heading font-semibold text-navy-500 uppercase tracking-wider">Status</th>
-              </tr>
-            </thead>
-            <tbody id="distTableBody">
-              <!-- Populated by JS -->
-            </tbody>
-          </table>
-        </div>
-        <!-- No results -->
-        <div id="noResults" class="hidden py-12 text-center">
-          <iconify-icon icon="lucide:search-x" width="40" class="text-silver-300 mb-3"></iconify-icon>
-          <p class="text-silver-500 font-medium">No distributors found matching your search.</p>
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <span class="reveal inline-block text-red-500 font-heading font-semibold text-sm uppercase tracking-widest mb-4">Our Network</span>
+        <h2 class="reveal font-heading font-bold text-3xl sm:text-4xl lg:text-5xl text-navy-500 tracking-tight" style="transition-delay:100ms">
+          Distributors Portal
+        </h2>
+        <p class="reveal text-silver-600 text-lg mt-3" style="transition-delay:200ms">
+          Find a Printastick distributor near you or explore opportunities to join our nationwide network.
+        </p>
+        <div class="reveal mt-8" style="transition-delay:300ms">
+          <a href="#contact" class="inline-flex items-center gap-2 bg-navy-500 hover:bg-navy-600 text-white font-heading font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-navy-500/25">
+            <iconify-icon icon="lucide:user-plus" width="18"></iconify-icon>
+            Become a Distributor
+          </a>
         </div>
       </div>
     </div>
@@ -901,64 +868,6 @@
 
   <!-- ============ JAVASCRIPT ============ -->
   <script>
-    // ===== Distributors Data (loaded from API) =====
-    let distributors = [];
-
-    async function loadDistributors() {
-      try {
-        const response = await fetch('/api/distributors');
-        distributors = await response.json();
-        renderDistributors(distributors);
-      } catch (error) {
-        console.error('Failed to load distributors:', error);
-      }
-    }
-
-    // ===== Populate Distributors Table =====
-    const distTableBody = document.getElementById('distTableBody');
-    const noResults = document.getElementById('noResults');
-    const distSearch = document.getElementById('distSearch');
-
-    function renderDistributors(data) {
-      if (data.length === 0) {
-        distTableBody.innerHTML = '';
-        noResults.classList.remove('hidden');
-        return;
-      }
-      noResults.classList.add('hidden');
-      distTableBody.innerHTML = data.map(d => `
-        <tr class="dist-row border-b border-silver-100 last:border-0">
-          <td class="px-6 py-4 text-sm font-medium text-silver-900">${d.name}</td>
-          <td class="px-6 py-4 text-sm text-silver-600">${d.city}</td>
-          <td class="px-6 py-4 text-sm text-silver-600 hidden sm:table-cell">${d.state}</td>
-          <td class="px-6 py-4 text-sm text-silver-600 hidden md:table-cell">${d.phone}</td>
-          <td class="px-6 py-4">
-            <span class="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full ${d.status === 'Active' ? 'bg-green-50 text-green-700' : 'bg-blue-50 text-blue-700'}">
-              <span class="w-1.5 h-1.5 rounded-full ${d.status === 'Active' ? 'bg-green-500' : 'bg-blue-500'}"></span>
-              ${d.status}
-            </span>
-          </td>
-        </tr>
-      `).join('');
-    }
-
-    // Load distributors on page load
-    loadDistributors();
-
-    distSearch.addEventListener('input', (e) => {
-      const query = e.target.value.toLowerCase().trim();
-      if (!query) {
-        renderDistributors(distributors);
-        return;
-      }
-      const filtered = distributors.filter(d =>
-        d.name.toLowerCase().includes(query) ||
-        d.city.toLowerCase().includes(query) ||
-        d.state.toLowerCase().includes(query)
-      );
-      renderDistributors(filtered);
-    });
-
     // ===== Navbar Scroll Effect =====
     const navbar = document.getElementById('navbar');
     let lastScroll = 0;
